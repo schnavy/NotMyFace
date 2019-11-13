@@ -9,7 +9,8 @@
     <script defer src="js/main.js" charset="utf-8"></script>
   </head>
   <body>
-    <video id="video" width="800" height="600" autoplay muted>
+    <video id="video" width="640" height="480" autoplay muted>
     </video>
+    <!-- <canvas id="canvas" width="640" height="480"></canvas> -->
   </body>
 </html>
