@@ -18,6 +18,7 @@ function startVideo() {
 }
 
 
+
 video.addEventListener('play', function() {
   const canvas = faceapi.createCanvasFromMedia(video)
   // canvas erstellen (passiert schon bei p5)
@@ -43,42 +44,54 @@ video.addEventListener('play', function() {
     // p5 setuo nur für tinyFaceDetector
 
 
+
     function setup() {
       createCanvas(video.width, video.height);
       noStroke()
       let pixelPosX = detection["0"]["box"]["topLeft"]["x"];
-      let pixelPosY = detection["0"]["box"]["topLeft"]["y"] - 30;
+      let pixelPosY = detection["0"]["box"]["topLeft"]["y"] - 70;
+      // let pixelPosX = mouseX;
+      // let pixelPosY = mouseY;
       let rectWidth = detection["0"]["box"]["width"];
       // let rectHeight = detection["0"]["box"]["height"];
+      let roundWidth = Math.ceil(rectWidth / 10) * 10;
 
-
+      let n = 0;
+      let yOff = 0;
       let raster = 10;
-      let pixelWidth = rectWidth/raster;
+      let pixelWidth = Math.ceil(roundWidth / raster);
+      let row = roundWidth * 4;
+
+      var ctx = canvas.getContext('2d');
+      ctx.drawImage(video, 0, 0, video.width, video.height);
+      var pixel = ctx.getImageData(pixelPosX, pixelPosY, roundWidth, roundWidth * 1.5);
+      console.log(n);
 
 
-      for (i = 0; i < raster; i++) {
-        for (j = 0; j < raster; j++) {
+      for (j = 0; j < raster * 1.5; j++) {
+
+        for (i = 0; i < raster; i++) {
+
+          let r = pixel["data"][n];
+          let g = pixel["data"][n + 1];
+          let b = pixel["data"][n + 2];
 
           let x = pixelPosX + (pixelWidth * i);
           let y = pixelPosY + (pixelWidth * j);
 
-          let ctx = canvas.getContext('2d');
-          ctx.drawImage(video, 0, 0, video.width, video.height);
-          let pixel = ctx.getImageData(x, y, 1, 1);
-
-          let r = pixel["data"][0];
-          let g = pixel["data"][1];
-          let b = pixel["data"][2];
-
           fill(r, g, b);
           rect(x, y, pixelWidth, pixelWidth);
 
-          ctx.clearRect(0, 0, canvas.width, canvas.height);
-
+          n = n + (pixelWidth * 4);
         }
+        n = (n + (pixelWidth) * row) - roundWidth * 4;
+
       }
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
     }
     setup()
+
 
 
   }, 100)
