@@ -43,51 +43,76 @@ video.addEventListener('play', function() {
 
     // p5 setuo nur für tinyFaceDetector
 
-
+    let n = 0;
+    let raster = 10;
 
     function setup() {
+
+      noStroke();
       createCanvas(video.width, video.height);
-      noStroke()
+
+      if (mouseX >= 20 && mouseX <= width - 20 && mouseY >= 20 && mouseY <= height - 20) {
+        background(230,0,0);
+        textSize(200);
+        text('NOT', 0, 155);
+        text('IN MY', 75, 310);
+        text('FACE', 0, 465);
+
+      }
+
+      let rectWidth = detection["0"]["box"]["width"];
       let pixelPosX = detection["0"]["box"]["topLeft"]["x"];
-      let pixelPosY = detection["0"]["box"]["topLeft"]["y"] - 70;
+      let pixelPosY = detection["0"]["box"]["topLeft"]["y"] - rectWidth/3;
       // let pixelPosX = mouseX;
       // let pixelPosY = mouseY;
-      let rectWidth = detection["0"]["box"]["width"];
       // let rectHeight = detection["0"]["box"]["height"];
-      let roundWidth = Math.ceil(rectWidth / 10) * 10;
+      console.log(detection);
 
-      let n = 0;
-      let yOff = 0;
-      let raster = 10;
-      let pixelWidth = Math.ceil(roundWidth / raster);
+      let roundWidth = int(rectWidth / raster) * raster;
+      let pixelWidth = int(roundWidth / raster);
       let row = roundWidth * 4;
 
       var ctx = canvas.getContext('2d');
       ctx.drawImage(video, 0, 0, video.width, video.height);
       var pixel = ctx.getImageData(pixelPosX, pixelPosY, roundWidth, roundWidth * 1.5);
-      console.log(n);
 
-
-      for (j = 0; j < raster * 1.5; j++) {
+      for (j = 0; j < raster * 1.4; j++) {
+        let randomValue2 = round(random(80));
 
         for (i = 0; i < raster; i++) {
+
+          let randomValue = round(random(500));
 
           let r = pixel["data"][n];
           let g = pixel["data"][n + 1];
           let b = pixel["data"][n + 2];
 
+          // if (randomValue === 1 || randomValue2 == 1) {
+          //   r = 255;
+          //   g = 0;
+          //   b = random(100);
+          // }
+          if (randomValue === 1 || randomValue2 == 1) {
+            r = random(255);
+            g = random(255);
+            b = random(255);
+          }
+
           let x = pixelPosX + (pixelWidth * i);
           let y = pixelPosY + (pixelWidth * j);
 
           fill(r, g, b);
+          stroke(r, g, b);
           rect(x, y, pixelWidth, pixelWidth);
 
           n = n + (pixelWidth * 4);
         }
-        n = (n + (pixelWidth) * row) - roundWidth * 4;
+        n = (n + pixelWidth * row) - roundWidth * 4;
 
       }
+
       ctx.clearRect(0, 0, canvas.width, canvas.height);
+
 
     }
     setup()
