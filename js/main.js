@@ -1,5 +1,6 @@
 let faces = [];
 let detection;
+let ctx;
 const video = document.getElementById('video');
 //console.log(faceapi.nets)
 Promise.all([
@@ -51,7 +52,6 @@ video.addEventListener('play', function() {
 
       noStroke();
       createCanvas(video.width, video.height);
-      console.log(detection.length);
 
       function pixelate(num) {
 
@@ -65,7 +65,7 @@ video.addEventListener('play', function() {
         let pixelWidth = int(roundWidth / raster);
         let row = roundWidth * 4;
 
-        var ctx = canvas.getContext('2d');
+        ctx = canvas.getContext('2d');
         ctx.drawImage(video, 0, 0, video.width, video.height);
         var pixel = ctx.getImageData(pixelPosX, pixelPosY, roundWidth, roundWidth * 1.5);
 
@@ -108,9 +108,9 @@ video.addEventListener('play', function() {
         pixelate(n);
       }
 
-
+      if(ctx!= undefined){
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-
+      }
 
       if (mouseX >= 20 && mouseX <= width - 20 && mouseY >= 20 && mouseY <= height - 20) {
         background(230, 0, 0);
