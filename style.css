@@ -1,4 +1,4 @@
-body{
+body {
   width: 100vw;
   height: 100vh;
   display: flex;
@@ -6,10 +6,10 @@ body{
   justify-content: center;
 }
 
-video{
+video {}
 
-}
-
-canvas{
+canvas {
   position: absolute;
+  /* -webkit-transform: scaleX(-1);
+  transform: scaleX(-1); */
 }
